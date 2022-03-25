@@ -355,4 +355,4 @@ LVGL 8 is NOT backward compatible with LVGL 7. See the changes...
 
 https://github.com/lvgl/lvgl/blob/master/docs/CHANGELOG.md#v800-01062021
 
-Should we migrate to LVGL 8?
+Should we migrate to LVGL 8? Or upgrade to LVGL 7.11.0?
