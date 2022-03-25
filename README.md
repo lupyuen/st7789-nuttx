@@ -188,7 +188,7 @@ Note that our ST7789 Display appears as "__/dev/lcd0__". This will be used by th
 
 # Render Pink Screen
 
-Let's render a pink screen on ST7789:
+Let's render a pink screen at startup on ST7789:
 
 ```c
 FAR struct lcd_dev_s *st7789_lcdinitialize(FAR struct spi_dev_s *spi)
