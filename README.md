@@ -51,6 +51,25 @@ Enable Logging:
 
 [(.config for BL602)](https://gist.github.com/lupyuen/a7fc921531c1d14e8d336fba0cdb1c83)
 
+# SPI Mode 3
+
+ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
+
+```c
+#ifdef CONFIG_BL602_SPI0
+#  warning Using SPI Mode 3 for ST7789 on BL602
+#  define CONFIG_LCD_ST7789_SPIMODE SPIDEV_MODE3 /* SPI Mode 3: Workaround for BL602 */
+#else
+#  ifndef CONFIG_LCD_ST7789_SPIMODE
+#    define CONFIG_LCD_ST7789_SPIMODE SPIDEV_MODE0
+#  endif /* CONFIG_LCD_ST7789_SPIMODE */
+#endif  /* CONFIG_BL602_SPI0 */
+```
+
+[(Source)](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L50-L57)
+
+[(More about this)](https://lupyuen.github.io/articles/display#initialise-spi-port)
+
 # Fix SPI Send
 
 TODO
