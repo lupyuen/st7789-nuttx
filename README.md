@@ -204,6 +204,8 @@ FAR struct lcd_dev_s *st7789_lcdinitialize(FAR struct spi_dev_s *spi)
 
 [(Source)](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L752-L777)
 
+When NuttX boots, we should see a pink screen. The screen refresh looks laggy, hopefully we'll fix this with SPI DMA.
+
 # Run LVGL Demo
 
 To run the LVGL Demo App...
