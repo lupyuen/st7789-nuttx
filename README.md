@@ -2,7 +2,7 @@
 
 (Tested on Pine64 PineCone BL602)
 
-TODO
+ST7789 Display and LVGL Graphics... Let's make it work on Apache NuttX RTOS!
 
 # Connect BL602 to ST7789
 
@@ -18,6 +18,33 @@ Connect BL602 to ST7789 as follows...
 | __`GPIO 5`__  | `BLK`               | Orange
 | __`3V3`__     | `3.3V`              | Grey
 | __`GND`__     | `GND`               | Black
+
+# Configure NuttX
+
+Configure NuttX with menuconfig...
+
+Enable SPI CMD/DATA:
+- Device Drivers → SPI Driver Support → SPI CMD/DATA
+
+Enable LCD Character Device:
+- Device Drivers → LCD Driver Support → Graphic LCD Driver Support LCD → character device   
+
+Enable ST7789 Driver:
+- Device Drivers → LCD Driver Support → Graphic LCD Driver Support → LCD driver selection → Sitronix ST7789 TFT Controller 
+
+Enable Logging:
+- Build Setup → Debug Options 
+- Select:
+  - Graphics Debug Features
+  - Graphics Error Output
+  - Graphics Warnings Output
+  - Graphics Informational Output  
+  - Low-level LCD Debug Features
+  - LCD Driver Error Output
+  - LCD Driver Warnings Output
+  - LCD Driver Informational Output
+
+[(.config for BL602)](https://gist.github.com/lupyuen/a7fc921531c1d14e8d336fba0cdb1c83)
 
 # Fix SPI Send
 
@@ -112,3 +139,27 @@ st7789_getplaneinfo: planeno: 0 bpp: 16
 NuttShell (NSH) NuttX-10.2.0-RC0
 nsh>
 ```
+
+# Render Pink Screen
+
+Let's render a pink screen on ST7789:
+
+```c
+FAR struct lcd_dev_s *st7789_lcdinitialize(FAR struct spi_dev_s *spi)
+{
+  ...
+  st7789_sleep(priv, false);
+  st7789_bpp(priv, ST7789_BPP);
+  st7789_setorientation(priv);
+  st7789_display(priv, true);
+  
+  #warning Render Pink Screem
+  st7789_fill(priv, 0xaaaa);
+  //  Previously: st7789_fill(priv, 0xffff);
+```
+
+[(Source)](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L752-L777)
+
+# LVGL
+
+TODO
