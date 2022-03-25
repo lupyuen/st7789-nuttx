@@ -199,7 +199,7 @@ FAR struct lcd_dev_s *st7789_lcdinitialize(FAR struct spi_dev_s *spi)
   st7789_setorientation(priv);
   st7789_display(priv, true);
   
-  #warning Render Pink Screem
+  #warning Render Pink Screen
   st7789_fill(priv, 0xaaaa);
   //  Previously: st7789_fill(priv, 0xffff);
 ```
