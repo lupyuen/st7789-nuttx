@@ -210,7 +210,7 @@ When NuttX boots, we should see a pink screen. The screen refresh looks laggy, h
 
 TODO: Screenshot
 
-TODO: Video
+[(Watch the demo on YouTube)](https://youtu.be/iaDYjO1rCmY)
 
 # Run LVGL Demo
 
