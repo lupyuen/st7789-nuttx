@@ -348,3 +348,11 @@ monitor_cb: 57600 px refreshed in 1100 ms
 ```
 
 The LVGL Demo Screen appears on ST7789 yay!
+
+Note that NuttX builds with LVGL version 7.3.0. The current version of LVGL is 8.2.0.
+
+LVGL 8 is NOT backward compatible with LVGL 7. See the changes...
+
+https://github.com/lvgl/lvgl/blob/master/docs/CHANGELOG.md#v800-01062021
+
+Should we migrate to LVGL 8?
