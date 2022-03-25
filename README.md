@@ -348,3 +348,5 @@ st7789_sendcmd: cmd: 0x2c
 st7789_sendcmd: OK
 monitor_cb: 57600 px refreshed in 1100 ms
 ```
+
+The LVGL Demo Screen appears on ST7789!
