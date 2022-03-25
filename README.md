@@ -78,21 +78,17 @@ ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
 
 # Fix SPI Send
 
-TODO
-
-Enable SPI Master and clear FIFO in Poll Send:
+We enable SPI Master and clear FIFO in Poll Send:
 
 https://github.com/lupyuen/incubator-nuttx/pull/42
 
 # SPI Cmd/Data
 
-TODO
-
-Implement SPI Cmd/Data:
+We implement SPI Cmd/Data for BL602:
 
 https://github.com/lupyuen/incubator-nuttx/pull/44
 
-After fixing SPI Send and SPI Cmd/Data...
+After fixing SPI Send and SPI Cmd/Data, the ST7789 Driver should start properly without hanging...
 
 ```text
 ▒gpio_pin_register: Registering /dev/gpio0
