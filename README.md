@@ -182,6 +182,8 @@ nsh> ls /dev
  zero
 ```
 
+Note that our ST7789 Display appears as "__/dev/lcd0__". This will be used by the LVGL Library.
+
 # Render Pink Screen
 
 Let's render a pink screen on ST7789:
