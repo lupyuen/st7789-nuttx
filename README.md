@@ -35,10 +35,13 @@ Enable ST7789 Driver:
 Enable LCD Character Device:
 - Device Drivers → LCD Driver Support → Graphic LCD Driver Support LCD → character device   
 
-Enable LVGL Demo App:
+Enable LVGL Library:
 - Application Configuration → Graphics Support → Light and Versatile Graphic Library (LVGL)
 - Graphics Settings → Horizontal Resolution: Set to 240
 - Graphics Settings → Vertical Resolution: Set to 240
+
+Enable LVGL Demo App:
+- Application Configuration → Examples → LVGL Demo
 
 Enable Logging:
 - Build Setup → Debug Options 
