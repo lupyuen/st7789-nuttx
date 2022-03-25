@@ -19,6 +19,8 @@ Connect BL602 to ST7789 as follows...
 | __`3V3`__     | `3.3V`              | Grey
 | __`GND`__     | `GND`               | Black
 
+TODO: Photo
+
 # Configure NuttX
 
 Configure NuttX with menuconfig...
@@ -78,9 +80,13 @@ ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
 
 # Fix SPI Send
 
-We enable SPI Master and clear FIFO in Poll Send:
+We enable SPI Master and clear FIFO in SPI Poll Send:
 
 https://github.com/lupyuen/incubator-nuttx/pull/42
+
+Logic Analyser shows that SPI Poll Send now transmits SPI Data correctly:
+
+TODO: Screenshot
 
 # SPI Cmd/Data
 
@@ -201,6 +207,10 @@ FAR struct lcd_dev_s *st7789_lcdinitialize(FAR struct spi_dev_s *spi)
 [(Source)](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L752-L777)
 
 When NuttX boots, we should see a pink screen. The screen refresh looks laggy, hopefully we'll fix this with SPI DMA.
+
+TODO: Screenshot
+
+TODO: Video
 
 # Run LVGL Demo
 
@@ -348,6 +358,10 @@ monitor_cb: 57600 px refreshed in 1100 ms
 ```
 
 The LVGL Demo Screen appears on ST7789 yay!
+
+TODO: Screenshot
+
+# LVGL Version
 
 Note that NuttX builds with LVGL version 7.3.0. The current version of LVGL is 8.2.0.
 
