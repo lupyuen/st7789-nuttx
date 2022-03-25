@@ -4,9 +4,32 @@
 
 TODO
 
+# Connect BL602 to ST7789
+
+Connect BL602 to ST7789 as follows...
+
+| BL602 Pin     | ST7789 SPI          | Wire Colour 
+|:--------------|:--------------------|:-------------------
+| __`GPIO 0`__  | `DC`  _(MISO)_      | Blue
+| __`GPIO 2`__  | Unused _(CS)_
+| __`GPIO 1`__  | `SDA` _(MOSI)_      | Yellow
+| __`GPIO 3`__  | `SCL` _(SCK)_       | Green
+| __`GPIO 4`__  | `RST`               | Black
+| __`GPIO 5`__  | `BLK`               | Orange
+| __`3V3`__     | `3.3V`              | Grey
+| __`GND`__     | `GND`               | Black
+
+# Fix SPI Send
+
+TODO
+
 Enable SPI Master and clear FIFO in Poll Send:
 
 https://github.com/lupyuen/incubator-nuttx/pull/42
+
+# SPI Cmd/Data
+
+TODO
 
 Implement SPI Cmd/Data:
 
