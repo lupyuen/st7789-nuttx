@@ -164,7 +164,19 @@ board_lcd_getdev: SPI port 0 bound to LCD 0
 st7789_getplaneinfo: planeno: 0 bpp: 16
 
 NuttShell (NSH) NuttX-10.2.0-RC0
-nsh>
+nsh> ls /dev
+/dev:
+ console
+ gpio0
+ gpio1
+ gpio2
+ lcd0
+ null
+ spi0
+ spitest0
+ timer0
+ urandom
+ zero
 ```
 
 # Render Pink Screen
