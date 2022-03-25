@@ -28,6 +28,9 @@ Enable SPI CMD/DATA:
 
 Enable ST7789 Driver:
 - Device Drivers → LCD Driver Support → Graphic LCD Driver Support → LCD driver selection → Sitronix ST7789 TFT Controller 
+- X Resolution: Set to 240
+- Y Resolution: Set to 240
+- SPI Mode: See below
  
 Enable LCD Character Device:
 - Device Drivers → LCD Driver Support → Graphic LCD Driver Support LCD → character device   
