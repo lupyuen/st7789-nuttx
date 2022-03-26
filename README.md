@@ -166,8 +166,7 @@ Logic Analyser shows that SPI Poll Send now transmits SPI Data correctly:
 
 Note that the MOSI Pin shows the correct data. Before fixing, the data was missing.
 
-As for the modified SPI Poll Exchange, we tested it with Semtech SX1262 SPI Transceiver on PineCone BL602:
-https://github.com/lupyuen/incubator-nuttx/releases/tag/release-2022-03-25
+As for the modified SPI Poll Exchange, we tested it with Semtech SX1262 SPI Transceiver on PineCone BL602: [release-2022-03-25](https://github.com/lupyuen/incubator-nuttx/releases/tag/release-2022-03-25)
 
 [(More about this)](https://github.com/lupyuen/incubator-nuttx/pull/42)
 
