@@ -83,6 +83,8 @@ Enable Logging:
 
 [(.config for BL602)](https://gist.github.com/lupyuen/a7fc921531c1d14e8d336fba0cdb1c83)
 
+![Fix SPI Send](https://lupyuen.github.io/images/st7789-spi2a.png)
+
 # Fix SPI Send
 
 On BL602, SPI Poll Send `bl602_spi_poll_send()` doesn't send any data because it doesn't enable SPI Master and it doesn't clear the SPI FIFO.
@@ -202,8 +204,6 @@ ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
 [(Source)](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L50-L57)
 
 [(More about this)](https://lupyuen.github.io/articles/display#initialise-spi-port)
-
-![Fix SPI Send](https://lupyuen.github.io/images/st7789-spi2a.png)
 
 # Load ST7789 Driver
 
