@@ -600,3 +600,11 @@ Should we migrate to LVGL 8? Or upgrade to LVGL 7.11.0?
 TODO: What happens if we switch to 8.2.0
 
 TODO: What happens if we switch to 7.11.0
+
+# Sharing SPI Bus
+
+PineDio Stack BL604 connects multiple SPI Devices to the same SPI Bus: ST7789 Display, SX1262 LoRa Transceiver, SPI Flash.
+
+How to share the same SPI Bus for multiple SPI Devices? How do we control the Chip Select Pins for each SPI Device?
+
+TODO
