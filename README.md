@@ -440,7 +440,7 @@ When NuttX boots, we should see a pink screen. The screen refresh looks laggy, h
 
 # Run LVGL Demo
 
-To run the LVGL Demo App...
+We run the LVGL Demo App `lvgldemo` with ST7789...
 
 ```text
 ▒gpio_pin_register: Registering /dev/gpio0
@@ -583,11 +583,9 @@ st7789_sendcmd: OK
 monitor_cb: 57600 px refreshed in 1100 ms
 ```
 
-The LVGL Demo Screen appears on ST7789 yay!
+The LVGL Demo Screen appears on ST7789 yay! The demo source code is here: [lvgldemo.c](https://github.com/lupyuen/incubator-nuttx-apps/blob/st7789/examples/lvgldemo/lvgldemo.c)
 
 ![LVGL Demo Screen appears on ST7789](https://lupyuen.github.io/images/st7789-lvgl.jpg)
-
-The demo source code is here: [lvgldemo.c](https://github.com/lupyuen/incubator-nuttx-apps/blob/st7789/examples/lvgldemo/lvgldemo.c)
 
 # LVGL Version
 
