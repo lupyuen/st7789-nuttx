@@ -587,6 +587,8 @@ The LVGL Demo Screen appears on ST7789 yay!
 
 ![LVGL Demo Screen appears on ST7789](https://lupyuen.github.io/images/st7789-lvgl.jpg)
 
+The demo source code is here: [lvgldemo.c](https://github.com/lupyuen/incubator-nuttx-apps/blob/st7789/examples/lvgldemo/lvgldemo.c)
+
 # LVGL Version
 
 Note that NuttX builds with LVGL version 7.3.0. The current version of LVGL is 8.2.0.
