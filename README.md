@@ -628,7 +628,9 @@ unzip:  cannot find zipfile directory in one of v8.2.0.zip or
         v8.2.0.zip.zip, and cannot find v8.2.0.zip.ZIP, period.
 ```
 
-Seems the NuttX Makefiles need to be fixed to support LVGL 8.
+Seems the NuttX Makefiles need to be fixed to support LVGL 8. 
+
+Also the demo source code needs to be updated for LVGL 8, since it's not compatible with LVGL 7: [lvgldemo.c](https://github.com/lupyuen/incubator-nuttx-apps/blob/st7789/examples/lvgldemo/lvgldemo.c)
 
 # Sharing SPI Bus
 
