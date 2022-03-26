@@ -222,15 +222,21 @@ ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
 
 # Fix SPI Send
 
-We enable SPI Master and clear FIFO in SPI Poll Send:
+On BL602, SPI Poll Send doesn't send any data because it doesn't enable SPI Master and it doesn't clear the SPI FIFO. Also it hangs because it loops forever waiting for the FIFO.
 
-https://github.com/lupyuen/incubator-nuttx/pull/42
+This problem affects the NuttX ST7789 Driver because the ST7789 Driver calls SPI Poll Send via `SPI_SEND()`.
+
+We fix this problem by moving the code that enables SPI Master and clears the FIFO, from SPI Poll Exchange to SPI Poll Send. (Note that SPI Poll Exchange calls SPI Poll Send)
+
+See https://twitter.com/MisterTechBlog/status/1507150677625040898
 
 Logic Analyser shows that SPI Poll Send now transmits SPI Data correctly:
 
 ![SPI Poll Send transmits SPI Data correctly](https://lupyuen.github.io/images/st7789-logic.png)
 
-Note that the MOSI Pin shows the correct data.
+Note that the MOSI Pin shows the correct data. Before fixing, the data was missing.
+
+[More about this)](https://github.com/lupyuen/incubator-nuttx/pull/42)
 
 # SPI Cmd/Data
 
