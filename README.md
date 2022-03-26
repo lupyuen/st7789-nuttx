@@ -172,11 +172,11 @@ As for the modified SPI Poll Exchange, we tested it with Semtech SX1262 SPI Tran
 
 # SPI Cmd/Data
 
-We implement SPI Cmd/Data for BL602:
+To control ST7789 Data / Command Pin, we implement SPI Cmd/Data for BL602:
 
 https://github.com/lupyuen/incubator-nuttx/pull/44
 
-Logic Analyser shows that MISO goes Low when transmitting ST7789 Commands...
+After implementing SPI Cmd/Data, Logic Analyser shows that MISO goes Low when transmitting ST7789 Commands...
 
 ![MISO goes Low when transmitting ST7789 Commands](https://lupyuen.github.io/images/st7789-logic.png)
 
