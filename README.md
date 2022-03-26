@@ -19,7 +19,7 @@ Connect BL602 to ST7789 as follows...
 | __`3V3`__     | `3.3V`              | Grey
 | __`GND`__     | `GND`               | Black
 
-TODO: Photo
+![Connect BL602 to ST7789](https://lupyuen.github.io/images/st7789-connect.jpg)
 
 # Configure NuttX
 
@@ -59,6 +59,10 @@ Enable Logging:
 
 [(.config for BL602)](https://gist.github.com/lupyuen/a7fc921531c1d14e8d336fba0cdb1c83)
 
+# Load ST7789 Driver
+
+TODO
+
 # SPI Mode 3
 
 ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
@@ -86,13 +90,25 @@ https://github.com/lupyuen/incubator-nuttx/pull/42
 
 Logic Analyser shows that SPI Poll Send now transmits SPI Data correctly:
 
-TODO: Screenshot
+![SPI Poll Send transmits SPI Data correctly](https://lupyuen.github.io/images/st7789-logic.png)
+
+Note that the MOSI Pin shows the correct data.
 
 # SPI Cmd/Data
 
 We implement SPI Cmd/Data for BL602:
 
 https://github.com/lupyuen/incubator-nuttx/pull/44
+
+Logic Analyser shows that MISO goes Low when transmitting ST7789 Commands...
+
+![MISO goes Low when transmitting ST7789 Commands](https://lupyuen.github.io/images/st7789-logic.png)
+
+And MISO goes High when transmitting ST7789 Data...
+
+![MISO goes High when transmitting ST7789 Data](https://lupyuen.github.io/images/st7789-logic2.png)
+
+# Boot NuttX
 
 After fixing SPI Send and SPI Cmd/Data, the ST7789 Driver should start properly without hanging...
 
@@ -208,9 +224,9 @@ FAR struct lcd_dev_s *st7789_lcdinitialize(FAR struct spi_dev_s *spi)
 
 When NuttX boots, we should see a pink screen. The screen refresh looks laggy, hopefully we'll fix this with SPI DMA.
 
-TODO: Screenshot
-
 [(Watch the demo on YouTube)](https://youtu.be/iaDYjO1rCmY)
+
+![When NuttX boots, we should see a pink screen](https://lupyuen.github.io/images/st7789-boot.jpg)
 
 # Run LVGL Demo
 
@@ -359,7 +375,7 @@ monitor_cb: 57600 px refreshed in 1100 ms
 
 The LVGL Demo Screen appears on ST7789 yay!
 
-TODO: Screenshot
+![LVGL Demo Screen appears on ST7789](https://lupyuen.github.io/images/st7789-lvgl.jpg)
 
 # LVGL Version
 
@@ -370,3 +386,7 @@ LVGL 8 is NOT backward compatible with LVGL 7. See the changes...
 https://github.com/lvgl/lvgl/blob/master/docs/CHANGELOG.md#v800-01062021
 
 Should we migrate to LVGL 8? Or upgrade to LVGL 7.11.0?
+
+TODO: What happens if we switch to 8.2.0
+
+TODO: What happens if we switch to 7.11.0
