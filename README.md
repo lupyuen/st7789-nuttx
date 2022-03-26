@@ -591,9 +591,9 @@ The LVGL Demo Screen appears on ST7789 yay!
 
 Note that NuttX builds with LVGL version 7.3.0. The current version of LVGL is 8.2.0.
 
-LVGL 8 is NOT backward compatible with LVGL 7. See the changes...
+LVGL 8 is NOT backward compatible with LVGL 7. See the breaking changes...
 
-https://github.com/lvgl/lvgl/blob/master/docs/CHANGELOG.md#v800-01062021
+- [LVGL 8.0.0 Release Notes](https://github.com/lvgl/lvgl/blob/master/docs/CHANGELOG.md#v800-01062021)
 
 Should we migrate to LVGL 8? Or upgrade to LVGL 7.11.0?
 
