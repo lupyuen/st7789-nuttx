@@ -180,11 +180,11 @@ https://github.com/lupyuen/incubator-nuttx/pull/44
 
 After implementing SPI Cmd/Data, Logic Analyser shows that MISO goes Low when transmitting ST7789 Commands...
 
-![MISO goes Low when transmitting ST7789 Commands](https://lupyuen.github.io/images/st7789-logic.png)
+![MISO goes Low when transmitting ST7789 Commands](https://lupyuen.github.io/images/st7789-logic1.png)
 
 And MISO goes High when transmitting ST7789 Data...
 
-![MISO goes High when transmitting ST7789 Data](https://lupyuen.github.io/images/st7789-logic2.png)
+![MISO goes High when transmitting ST7789 Data](https://lupyuen.github.io/images/st7789-logic2a.png)
 
 # SPI Mode 3
 
