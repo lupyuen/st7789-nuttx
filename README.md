@@ -169,7 +169,7 @@ Note that the MOSI Pin shows the correct data. Before fixing, the data was missi
 As for the modified SPI Poll Exchange, we tested it with Semtech SX1262 SPI Transceiver on PineCone BL602:
 https://github.com/lupyuen/incubator-nuttx/releases/tag/release-2022-03-25
 
-[More about this)](https://github.com/lupyuen/incubator-nuttx/pull/42)
+[(More about this)](https://github.com/lupyuen/incubator-nuttx/pull/42)
 
 # SPI Cmd/Data
 
