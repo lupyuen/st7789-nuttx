@@ -164,7 +164,7 @@ static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
 
 Logic Analyser shows that SPI Poll Send now transmits SPI Data correctly:
 
-![SPI Poll Send transmits SPI Data correctly](https://lupyuen.github.io/images/st7789-logic.png)
+![SPI Poll Send transmits SPI Data correctly](https://lupyuen.github.io/images/st7789-logic3.png)
 
 Note that the MOSI Pin shows the correct data. Before fixing, the data was missing.
 
