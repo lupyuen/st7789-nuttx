@@ -1,8 +1,10 @@
+![Connect BL602 to ST7789](https://lupyuen.github.io/images/st7789-title.jpg)
+
 # ST7789 and LVGL Demo for Apache NuttX RTOS
 
 (Tested on Pine64 PineCone BL602)
 
-ST7789 Display and LVGL Graphics... Let's make it work on Apache NuttX RTOS!
+ST7789 Display with LVGL Graphics... Let's make it work on Apache NuttX RTOS!
 
 # Connect BL602 to ST7789
 
