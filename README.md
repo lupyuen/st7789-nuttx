@@ -21,12 +21,36 @@ Connect BL602 to ST7789 as follows...
 
 ![Connect BL602 to ST7789](https://lupyuen.github.io/images/st7789-connect.jpg)
 
+The BL602 pins for ST7789 are defined in [board.h](https://github.com/lupyuen/incubator-nuttx/blob/st7789/boards/risc-v/bl602/bl602evb/include/board.h#L92-L104)
+
+```c
+/* SPI Configuration: For PineCone BL602 */
+
+#define BOARD_SPI_CS   (GPIO_INPUT | GPIO_PULLUP | GPIO_FUNC_SPI | GPIO_PIN2)
+#define BOARD_SPI_MOSI (GPIO_INPUT | GPIO_PULLUP | GPIO_FUNC_SPI | GPIO_PIN1)
+#define BOARD_SPI_MISO (GPIO_INPUT | GPIO_PULLUP | GPIO_FUNC_SPI | GPIO_PIN0)
+#define BOARD_SPI_CLK  (GPIO_INPUT | GPIO_PULLUP | GPIO_FUNC_SPI | GPIO_PIN3)
+
+#ifdef CONFIG_LCD_ST7789
+/* ST7789 Configuration: Reset and Backlight Pins */
+
+#define BOARD_LCD_RST (GPIO_OUTPUT | GPIO_PULLUP | GPIO_FUNC_SWGPIO | GPIO_PIN4)
+#define BOARD_LCD_BL  (GPIO_OUTPUT | GPIO_PULLUP | GPIO_FUNC_SWGPIO | GPIO_PIN5)
+#endif  /* CONFIG_LCD_ST7789 */
+```
+
 # Configure NuttX
 
 Configure NuttX with menuconfig...
 
+Enable SPI Port:
+- System Type → BL602 Peripheral Support → SPI0
+
 Enable SPI CMD/DATA:
-- Device Drivers → SPI Driver Support → SPI CMD/DATA
+- Device Drivers → SPI Driver Support
+  - SPI Exchange
+  - SPI CMD/DATA
+  - SPI Character Driver
 
 Enable ST7789 Driver:
 - Device Drivers → LCD Driver Support → Graphic LCD Driver Support → LCD driver selection → Sitronix ST7789 TFT Controller 
