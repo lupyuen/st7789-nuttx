@@ -220,21 +220,87 @@ ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
 
 [(More about this)](https://lupyuen.github.io/articles/display#initialise-spi-port)
 
+![Fix SPI Send](https://lupyuen.github.io/images/st7789-spi2a.png)
+
 # Fix SPI Send
 
-On BL602, SPI Poll Send doesn't send any data because it doesn't enable SPI Master and it doesn't clear the SPI FIFO. Also it hangs because it loops forever waiting for the FIFO.
+On BL602, SPI Poll Send `bl602_spi_poll_send()` doesn't send any data because it doesn't enable SPI Master and it doesn't clear the SPI FIFO.
 
-This problem affects the NuttX ST7789 Driver because the ST7789 Driver calls SPI Poll Send via `SPI_SEND()`.
+SPI Poll Send also hangs because it loops forever waiting for the SPI FIFO: [bl602_spi.c](https://github.com/apache/incubator-nuttx/blob/master/arch/risc-v/src/bl602/bl602_spi.c#L779-L803)
+
+```c
+static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
+{
+  ...
+  /* This loop hangs because SPI Master is not enabled and SPI FIFO is not cleared */
+  
+  while (0 == tmp_val)
+    {
+      /* get data from rx fifo */
+
+      tmp_val = getreg32(BL602_SPI_FIFO_CFG_1);
+      tmp_val = (tmp_val & SPI_FIFO_CFG_1_RX_CNT_MASK)
+                >> SPI_FIFO_CFG_1_RX_CNT_SHIFT;
+    }
+```
+
+This problem affects the NuttX ST7789 Driver because the ST7789 Driver calls SPI Poll Send via `SPI_SEND()` and `bl602_spi_send()`.
 
 We fix this problem by moving the code that enables SPI Master and clears the FIFO, from SPI Poll Exchange to SPI Poll Send. (Note that SPI Poll Exchange calls SPI Poll Send)
 
-See https://twitter.com/MisterTechBlog/status/1507150677625040898
+Before fixing, SPI Poll Send looks like this: [bl602_spi.c](https://github.com/apache/incubator-nuttx/blob/master/arch/risc-v/src/bl602/bl602_spi.c#L779-L803)
+
+```c
+static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
+{
+  uint32_t val;
+  uint32_t tmp_val = 0;
+
+  /* write data to tx fifo */
+
+  putreg32(wd, BL602_SPI_FIFO_WDATA);
+
+  while (0 == tmp_val)
+    {
+      /* get data from rx fifo */
+      ...
+```
+
+After fixing, SPI Poll Send looks like this: [bl602_spi.c](https://github.com/lupyuen/incubator-nuttx/blob/st7789/arch/risc-v/src/bl602/bl602_spi.c#L806-L839)
+
+```c
+static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
+{
+  uint32_t val;
+  uint32_t tmp_val = 0;
+
+  /* spi enable master */
+
+  modifyreg32(BL602_SPI_CFG, SPI_CFG_CR_S_EN, SPI_CFG_CR_M_EN);
+
+  /* spi fifo clear  */
+
+  modifyreg32(BL602_SPI_FIFO_CFG_0, SPI_FIFO_CFG_0_RX_CLR
+              | SPI_FIFO_CFG_0_TX_CLR, 0);
+
+  /* write data to tx fifo */
+
+  putreg32(wd, BL602_SPI_FIFO_WDATA);
+
+  while (0 == tmp_val)
+    {
+      /* get data from rx fifo */
+      ...
+```
 
 Logic Analyser shows that SPI Poll Send now transmits SPI Data correctly:
 
 ![SPI Poll Send transmits SPI Data correctly](https://lupyuen.github.io/images/st7789-logic.png)
 
 Note that the MOSI Pin shows the correct data. Before fixing, the data was missing.
+
+As for the modified SPI Poll Exchange, we tested it with Semtech SX1262 SPI Transceiver on PineCone BL602:
+https://github.com/lupyuen/incubator-nuttx/releases/tag/release-2022-03-25
 
 [More about this)](https://github.com/lupyuen/incubator-nuttx/pull/42)
 
