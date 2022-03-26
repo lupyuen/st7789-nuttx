@@ -607,7 +607,26 @@ The LVGL Demo App renders correctly when we switch to LVGL 7.11.0. But we're not
 
 _What happens if we switch to LVGL 8.2.0?_
 
-TODO
+NuttX Build fails when downloading the LVGL Source Code...
+
+```text
+make[3]: Entering directory '/home/user/nuttx/apps/examples/lvgldemo'
+Downloading: v8.2.0.zip
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   118  100   118    0     0    361      0 --:--:-- --:--:-- --:--:--   360
+100    14  100    14    0     0     12      0  0:00:01  0:00:01 --:--:--     0
+Unpacking: v8.2.0.zip -> lv_demos
+Archive:  v8.2.0.zip
+  End-of-central-directory signature not found.  Either this file is not
+  a zipfile, or it constitutes one disk of a multi-part archive.  In the
+  latter case the central directory and zipfile comment will be found on
+  the last disk(s) of this archive.
+unzip:  cannot find zipfile directory in one of v8.2.0.zip or
+        v8.2.0.zip.zip, and cannot find v8.2.0.zip.ZIP, period.
+```
+
+Seems the NuttX Makefiles need to be fixed to support LVGL 8.
 
 # Sharing SPI Bus
 
