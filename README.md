@@ -188,7 +188,7 @@ And MISO goes High when transmitting ST7789 Data...
 
 # SPI Mode 3
 
-ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
+ST7789 only works with BL602 in SPI Mode 3 for some unknown reason: [st7789.c](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L50-L57)
 
 ```c
 #ifdef CONFIG_BL602_SPI0
@@ -200,8 +200,6 @@ ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
 #  endif /* CONFIG_LCD_ST7789_SPIMODE */
 #endif  /* CONFIG_BL602_SPI0 */
 ```
-
-[(Source)](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L50-L57)
 
 [(More about this)](https://lupyuen.github.io/articles/display#initialise-spi-port)
 
@@ -419,11 +417,10 @@ Note that our ST7789 Display appears as "__/dev/lcd0__". This will be used by th
 
 # Render Pink Screen
 
-Let's render a pink screen at startup on ST7789:
+Let's render a pink screen at startup: [st7789.c](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L752-L777)
 
 ```c
-FAR struct lcd_dev_s *st7789_lcdinitialize(FAR struct spi_dev_s *spi)
-{
+FAR struct lcd_dev_s *st7789_lcdinitialize(FAR struct spi_dev_s *spi) {
   ...
   st7789_sleep(priv, false);
   st7789_bpp(priv, ST7789_BPP);
@@ -434,8 +431,6 @@ FAR struct lcd_dev_s *st7789_lcdinitialize(FAR struct spi_dev_s *spi)
   st7789_fill(priv, 0xaaaa);
   //  Previously: st7789_fill(priv, 0xffff);
 ```
-
-[(Source)](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L752-L777)
 
 When NuttX boots, we should see a pink screen. The screen refresh looks laggy, hopefully we'll fix this with SPI DMA.
 
