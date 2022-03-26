@@ -83,6 +83,129 @@ Enable Logging:
 
 [(.config for BL602)](https://gist.github.com/lupyuen/a7fc921531c1d14e8d336fba0cdb1c83)
 
+# Fix SPI Send
+
+On BL602, SPI Poll Send `bl602_spi_poll_send()` doesn't send any data because it doesn't enable SPI Master and it doesn't clear the SPI FIFO.
+
+SPI Poll Send also hangs because it loops forever waiting for the SPI FIFO: [bl602_spi.c](https://github.com/apache/incubator-nuttx/blob/master/arch/risc-v/src/bl602/bl602_spi.c#L779-L803)
+
+```c
+static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
+{
+  uint32_t val;
+  uint32_t tmp_val = 0;
+
+  /* write data to tx fifo */
+
+  putreg32(wd, BL602_SPI_FIFO_WDATA);
+  
+  /* This loop hangs because SPI Master is not enabled and SPI FIFO is not cleared */
+  
+  while (0 == tmp_val)
+    {
+      /* get data from rx fifo */
+
+      tmp_val = getreg32(BL602_SPI_FIFO_CFG_1);
+      tmp_val = (tmp_val & SPI_FIFO_CFG_1_RX_CNT_MASK)
+                >> SPI_FIFO_CFG_1_RX_CNT_SHIFT;
+    }
+```
+
+This problem affects the NuttX ST7789 Driver because the ST7789 Driver calls SPI Poll Send via `SPI_SEND()` and `bl602_spi_send()`.
+
+We fix this problem by moving the code that enables SPI Master and clears the FIFO, from SPI Poll Exchange `bl602_spi_poll_exchange()` to SPI Poll Send. (Note that SPI Poll Exchange calls SPI Poll Send)
+
+Before fixing, SPI Poll Send looks like this: [bl602_spi.c](https://github.com/apache/incubator-nuttx/blob/master/arch/risc-v/src/bl602/bl602_spi.c#L779-L803)
+
+```c
+static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
+{
+  uint32_t val;
+  uint32_t tmp_val = 0;
+
+  /* write data to tx fifo */
+
+  putreg32(wd, BL602_SPI_FIFO_WDATA);
+
+  while (0 == tmp_val)
+    {
+      /* get data from rx fifo */
+      ...
+```
+
+After fixing, SPI Poll Send enables SPI Master and clears SPI FIFO: [bl602_spi.c](https://github.com/lupyuen/incubator-nuttx/blob/st7789/arch/risc-v/src/bl602/bl602_spi.c#L806-L839)
+
+```c
+static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
+{
+  uint32_t val;
+  uint32_t tmp_val = 0;
+
+  /* spi enable master */
+
+  modifyreg32(BL602_SPI_CFG, SPI_CFG_CR_S_EN, SPI_CFG_CR_M_EN);
+
+  /* spi fifo clear  */
+
+  modifyreg32(BL602_SPI_FIFO_CFG_0, SPI_FIFO_CFG_0_RX_CLR
+              | SPI_FIFO_CFG_0_TX_CLR, 0);
+
+  /* write data to tx fifo */
+
+  putreg32(wd, BL602_SPI_FIFO_WDATA);
+
+  while (0 == tmp_val)
+    {
+      /* get data from rx fifo */
+      ...
+```
+
+Logic Analyser shows that SPI Poll Send now transmits SPI Data correctly:
+
+![SPI Poll Send transmits SPI Data correctly](https://lupyuen.github.io/images/st7789-logic.png)
+
+Note that the MOSI Pin shows the correct data. Before fixing, the data was missing.
+
+As for the modified SPI Poll Exchange, we tested it with Semtech SX1262 SPI Transceiver on PineCone BL602:
+https://github.com/lupyuen/incubator-nuttx/releases/tag/release-2022-03-25
+
+[More about this)](https://github.com/lupyuen/incubator-nuttx/pull/42)
+
+# SPI Cmd/Data
+
+We implement SPI Cmd/Data for BL602:
+
+https://github.com/lupyuen/incubator-nuttx/pull/44
+
+Logic Analyser shows that MISO goes Low when transmitting ST7789 Commands...
+
+![MISO goes Low when transmitting ST7789 Commands](https://lupyuen.github.io/images/st7789-logic.png)
+
+And MISO goes High when transmitting ST7789 Data...
+
+![MISO goes High when transmitting ST7789 Data](https://lupyuen.github.io/images/st7789-logic2.png)
+
+# SPI Mode 3
+
+ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
+
+```c
+#ifdef CONFIG_BL602_SPI0
+#  warning Using SPI Mode 3 for ST7789 on BL602
+#  define CONFIG_LCD_ST7789_SPIMODE SPIDEV_MODE3 /* SPI Mode 3: Workaround for BL602 */
+#else
+#  ifndef CONFIG_LCD_ST7789_SPIMODE
+#    define CONFIG_LCD_ST7789_SPIMODE SPIDEV_MODE0
+#  endif /* CONFIG_LCD_ST7789_SPIMODE */
+#endif  /* CONFIG_BL602_SPI0 */
+```
+
+[(Source)](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L50-L57)
+
+[(More about this)](https://lupyuen.github.io/articles/display#initialise-spi-port)
+
+![Fix SPI Send](https://lupyuen.github.io/images/st7789-spi2a.png)
+
 # Load ST7789 Driver
 
 We load the LCD Driver at startup: [bl602_bringup.c](https://github.com/lupyuen/incubator-nuttx/blob/st7789/boards/risc-v/bl602/bl602evb/src/bl602_bringup.c#L676-L696)
@@ -200,123 +323,6 @@ FAR struct lcd_dev_s *board_lcd_getdev(int devno)
 }
 #endif  //  CONFIG_LCD_ST7789
 ```
-
-# SPI Mode 3
-
-ST7789 only works with BL602 in SPI Mode 3 for some unknown reason...
-
-```c
-#ifdef CONFIG_BL602_SPI0
-#  warning Using SPI Mode 3 for ST7789 on BL602
-#  define CONFIG_LCD_ST7789_SPIMODE SPIDEV_MODE3 /* SPI Mode 3: Workaround for BL602 */
-#else
-#  ifndef CONFIG_LCD_ST7789_SPIMODE
-#    define CONFIG_LCD_ST7789_SPIMODE SPIDEV_MODE0
-#  endif /* CONFIG_LCD_ST7789_SPIMODE */
-#endif  /* CONFIG_BL602_SPI0 */
-```
-
-[(Source)](https://github.com/lupyuen/incubator-nuttx/blob/st7789/drivers/lcd/st7789.c#L50-L57)
-
-[(More about this)](https://lupyuen.github.io/articles/display#initialise-spi-port)
-
-![Fix SPI Send](https://lupyuen.github.io/images/st7789-spi2a.png)
-
-# Fix SPI Send
-
-On BL602, SPI Poll Send `bl602_spi_poll_send()` doesn't send any data because it doesn't enable SPI Master and it doesn't clear the SPI FIFO.
-
-SPI Poll Send also hangs because it loops forever waiting for the SPI FIFO: [bl602_spi.c](https://github.com/apache/incubator-nuttx/blob/master/arch/risc-v/src/bl602/bl602_spi.c#L779-L803)
-
-```c
-static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
-{
-  ...
-  /* This loop hangs because SPI Master is not enabled and SPI FIFO is not cleared */
-  
-  while (0 == tmp_val)
-    {
-      /* get data from rx fifo */
-
-      tmp_val = getreg32(BL602_SPI_FIFO_CFG_1);
-      tmp_val = (tmp_val & SPI_FIFO_CFG_1_RX_CNT_MASK)
-                >> SPI_FIFO_CFG_1_RX_CNT_SHIFT;
-    }
-```
-
-This problem affects the NuttX ST7789 Driver because the ST7789 Driver calls SPI Poll Send via `SPI_SEND()` and `bl602_spi_send()`.
-
-We fix this problem by moving the code that enables SPI Master and clears the FIFO, from SPI Poll Exchange to SPI Poll Send. (Note that SPI Poll Exchange calls SPI Poll Send)
-
-Before fixing, SPI Poll Send looks like this: [bl602_spi.c](https://github.com/apache/incubator-nuttx/blob/master/arch/risc-v/src/bl602/bl602_spi.c#L779-L803)
-
-```c
-static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
-{
-  uint32_t val;
-  uint32_t tmp_val = 0;
-
-  /* write data to tx fifo */
-
-  putreg32(wd, BL602_SPI_FIFO_WDATA);
-
-  while (0 == tmp_val)
-    {
-      /* get data from rx fifo */
-      ...
-```
-
-After fixing, SPI Poll Send looks like this: [bl602_spi.c](https://github.com/lupyuen/incubator-nuttx/blob/st7789/arch/risc-v/src/bl602/bl602_spi.c#L806-L839)
-
-```c
-static uint32_t bl602_spi_poll_send(struct bl602_spi_priv_s *priv, uint32_t wd)
-{
-  uint32_t val;
-  uint32_t tmp_val = 0;
-
-  /* spi enable master */
-
-  modifyreg32(BL602_SPI_CFG, SPI_CFG_CR_S_EN, SPI_CFG_CR_M_EN);
-
-  /* spi fifo clear  */
-
-  modifyreg32(BL602_SPI_FIFO_CFG_0, SPI_FIFO_CFG_0_RX_CLR
-              | SPI_FIFO_CFG_0_TX_CLR, 0);
-
-  /* write data to tx fifo */
-
-  putreg32(wd, BL602_SPI_FIFO_WDATA);
-
-  while (0 == tmp_val)
-    {
-      /* get data from rx fifo */
-      ...
-```
-
-Logic Analyser shows that SPI Poll Send now transmits SPI Data correctly:
-
-![SPI Poll Send transmits SPI Data correctly](https://lupyuen.github.io/images/st7789-logic.png)
-
-Note that the MOSI Pin shows the correct data. Before fixing, the data was missing.
-
-As for the modified SPI Poll Exchange, we tested it with Semtech SX1262 SPI Transceiver on PineCone BL602:
-https://github.com/lupyuen/incubator-nuttx/releases/tag/release-2022-03-25
-
-[More about this)](https://github.com/lupyuen/incubator-nuttx/pull/42)
-
-# SPI Cmd/Data
-
-We implement SPI Cmd/Data for BL602:
-
-https://github.com/lupyuen/incubator-nuttx/pull/44
-
-Logic Analyser shows that MISO goes Low when transmitting ST7789 Commands...
-
-![MISO goes Low when transmitting ST7789 Commands](https://lupyuen.github.io/images/st7789-logic.png)
-
-And MISO goes High when transmitting ST7789 Data...
-
-![MISO goes High when transmitting ST7789 Data](https://lupyuen.github.io/images/st7789-logic2.png)
 
 # Boot NuttX
 
