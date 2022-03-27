@@ -593,7 +593,40 @@ The LVGL Demo Screen appears on ST7789 yay! The demo source code is here: [lvgld
 
 We can specify the LVGL Version in menuconfig:
 
-Application Configuration → Graphics Support → Light and Versatile Graphic Library (LVGL) → LVGL Version  
+- Application Configuration → Graphics Support → Light and Versatile Graphic Library (LVGL) → LVGL Version  
+
+After setting the LVGL Version, be sure to delete all downloaded versions of LVGL before building NuttX:
+
+```bash
+## TODO: Change this to the path of our "incubator-nuttx" folder
+cd nuttx/nuttx
+
+## Preserve the Build Config
+cp .config ../config
+
+## Erase the build files
+make clean
+
+## Erase the Build Config and Kconfig files
+make distclean
+
+## For BL602: Configure the build for BL602
+./tools/configure.sh bl602evb:nsh
+
+## For ESP32: Configure the build for ESP32.
+## TODO: Change "esp32-devkitc" to our ESP32 board.
+./tools/configure.sh esp32-devkitc:nsh
+
+## Restore the Build Config
+cp ../config .config
+
+## Erase all downloaded versions of LVGL
+rm ../apps/graphics/lvgl/v7*.zip
+rm ../apps/graphics/lvgl/v8*.zip
+
+## Build NuttX
+make
+```
 
 Note that NuttX builds with LVGL version 7.3.0. The current version of LVGL is 8.2.0.
 
@@ -605,7 +638,17 @@ Should we migrate to LVGL 8? Or upgrade to LVGL 7.11.0?
 
 _What happens if we switch to LVGL 7.11.0?_
 
-The LVGL Demo App renders correctly when we switch to LVGL 7.11.0. But we're not sure if all the features are OK until we do a thorough test.
+NuttX Build fails when we switch to LVGL 7.11.0...
+
+```text
+/home/user/nuttx/apps/graphics/lvgl/lv_conf.h:86:50: error: incompatible types when initializing type 'short unsigned int' using type 'lv_color_t' {aka 'union <anonymous>'}
+ #define LV_COLOR_TRANSP    ((lv_color_t){.full = (CONFIG_LV_COLOR_TRANSP)})
+                                                  ^
+/home/user/nuttx/apps/graphics/lvgl/lvgl/src/lv_core/../lv_draw/lv_img_buf.h:351:25: note: in expansion of macro 'LV_COLOR_TRANSP'
+         lv_color_t ct = LV_COLOR_TRANSP;
+```
+
+It seems the demo source code needs to be updated for 7.11.0: [lvgldemo.c](https://github.com/lupyuen/incubator-nuttx-apps/blob/st7789/examples/lvgldemo/lvgldemo.c)
 
 _What happens if we switch to LVGL 8.2.0?_
 
