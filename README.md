@@ -4,6 +4,10 @@
 
 (Tested on Pine64 PineCone BL602)
 
+Read the article...
+
+-   ["ST7789 Display with LVGL Graphics on Apache NuttX RTOS"](https://lupyuen.github.io/articles/st7789)
+
 ST7789 Display with LVGL Graphics... Let's make it work on Apache NuttX RTOS!
 
 [__Follow the updates on Twitter__](https://twitter.com/MisterTechBlog/status/1507854679241199616)
