@@ -6,6 +6,8 @@
 
 ST7789 Display with LVGL Graphics... Let's make it work on Apache NuttX RTOS!
 
+[__Follow the updates on Twitter__](https://twitter.com/MisterTechBlog/status/1507854679241199616)
+
 # Connect BL602 to ST7789
 
 Connect BL602 to ST7789 as follows...
