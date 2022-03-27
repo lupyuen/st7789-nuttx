@@ -24,8 +24,8 @@ Connect BL602 to ST7789 as follows...
 | __`GPIO 3`__  | `SCL` _(SCK)_       | Green
 | __`GPIO 4`__  | `RST`               | Black
 | __`GPIO 5`__  | `BLK`               | Orange
-| __`3V3`__     | `3.3V`              | Grey
-| __`GND`__     | `GND`               | Black
+| __`3V3`__     | `3.3V`              | Red
+| __`GND`__     | `GND`               | Grey
 
 ![Connect BL602 to ST7789](https://lupyuen.github.io/images/st7789-connect.jpg)
 
