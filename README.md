@@ -263,8 +263,13 @@ Note that `BOARD_SPI_MISO & GPIO_PIN_MASK` preserves the MISO GPIO Number when r
 When the SPI Port is deselected (after the SPI operation), we revert MISO back from GPIO Pin to SPI Pin: [bl602_spi.c](https://github.com/lupyuen/incubator-nuttx/blob/st7789/arch/risc-v/src/bl602/bl602_spi.c#L415-L453)
 
 ```c
-static void bl602_spi_select(struct spi_dev_s *dev, uint32_t devid, bool selected) {
-  ...
+static void bl602_spi_select(struct spi_dev_s *dev, uint32_t devid,
+                             bool selected)
+{
+  /* we used hardware CS */
+
+  spiinfo("devid: %lu, CS: %s\n", devid, selected ? "select" : "free");
+
 #ifdef CONFIG_SPI_CMDDATA
   /* revert MISO from GPIO Pin to SPI Pin */
 
@@ -292,7 +297,7 @@ We also tested LVGL with ST7789 on PineCone BL602:
 
 As for regular SPI Devices that don't require SPI Cmd/Data, we tested `CONFIG_SPI_CMDDATA=y` with Semtech SX1262 SPI Transceiver on PineCone BL602:
 
--   TODO: [Testing Cmd/Data]()
+-   [Testing Cmd/Data](https://github.com/lupyuen/incubator-nuttx/releases/tag/release-2022-03-29)
 
 [(More details)](https://github.com/lupyuen/incubator-nuttx/pull/44)
 
