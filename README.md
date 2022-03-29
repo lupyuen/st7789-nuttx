@@ -189,8 +189,6 @@ To control the Data/Command Pin on ST7789 SPI Display, the SPI Driver flips the 
 
 int esp32c3_spi2_cmddata(FAR struct spi_dev_s *dev, uint32_t devid, bool cmd)
 {
-#if defined(CONFIG_LCD_ST7735) || defined(CONFIG_LCD_ST7789) || \
-    defined(CONFIG_LCD_GC9A01)
   if (devid == SPIDEV_DISPLAY(0))
     {
       /*  This is the Data/Command control pad which determines whether the
@@ -202,7 +200,6 @@ int esp32c3_spi2_cmddata(FAR struct spi_dev_s *dev, uint32_t devid, bool cmd)
       return OK;
     }
 
-#endif
   spiinfo("devid: %" PRIu32 " CMD: %s\n", devid, cmd ? "command" :
           "data");
 
@@ -222,8 +219,6 @@ static int bl602_spi_cmddata(struct spi_dev_s *dev,
   spiinfo("devid: %" PRIu32 " CMD: %s\n", devid, cmd ? "command" :
           "data");
 
-#if defined(CONFIG_LCD_ST7735) || defined(CONFIG_LCD_ST7789) || \
-    defined(CONFIG_LCD_GC9A01)
   if (devid == SPIDEV_DISPLAY(0))
     {
       gpio_pinset_t gpio;
@@ -248,7 +243,6 @@ static int bl602_spi_cmddata(struct spi_dev_s *dev,
 
       return OK;
     }
-#endif
 
   spierr("SPI cmddata not supported\n");
   DEBUGPANIC();
