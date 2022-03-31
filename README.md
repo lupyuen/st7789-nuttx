@@ -824,7 +824,7 @@ It seems the demo source code needs to be updated for 7.11.0: [lvgldemo.c](https
 
 _What happens if we switch to LVGL 8.2.0?_
 
-NuttX Build fails when downloading the LVGL Source Code...
+NuttX Build fails when downloading the LVGL Demo Code...
 
 ```text
 make[3]: Entering directory '/home/user/nuttx/apps/examples/lvgldemo'
