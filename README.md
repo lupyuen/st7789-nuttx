@@ -820,7 +820,7 @@ NuttX Build fails when we switch to LVGL 7.11.0...
          lv_color_t ct = LV_COLOR_TRANSP;
 ```
 
-It seems the demo source code needs to be updated for 7.11.0: [lvgldemo.c](https://github.com/lupyuen/incubator-nuttx-apps/blob/st7789/examples/lvgldemo/lvgldemo.c)
+It seems that NuttX needs to be updated to support 7.11.0.
 
 _What happens if we switch to LVGL 8.2.0?_
 
@@ -843,9 +843,7 @@ unzip:  cannot find zipfile directory in one of v8.2.0.zip or
         v8.2.0.zip.zip, and cannot find v8.2.0.zip.ZIP, period.
 ```
 
-Seems the NuttX Makefiles need to be fixed to support LVGL 8. 
-
-Also the demo source code needs to be updated for LVGL 8, which is not compatible with LVGL 7: [lvgldemo.c](https://github.com/lupyuen/incubator-nuttx-apps/blob/st7789/examples/lvgldemo/lvgldemo.c)
+Seems the NuttX Build need to be fixed to support LVGL 8. 
 
 # Sharing SPI Bus
 
