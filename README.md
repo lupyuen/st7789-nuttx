@@ -851,4 +851,4 @@ PineDio Stack BL604 connects multiple SPI Devices to the same SPI Bus: ST7789 Di
 
 How to share the same SPI Bus for multiple SPI Devices? How do we control the Chip Select Pins for each SPI Device?
 
-TODO
+[Here's how we share the SPI Bus](https://lupyuen.github.io/articles/st7789#shared-spi-bus)
