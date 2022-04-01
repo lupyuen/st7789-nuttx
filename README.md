@@ -843,7 +843,7 @@ unzip:  cannot find zipfile directory in one of v8.2.0.zip or
         v8.2.0.zip.zip, and cannot find v8.2.0.zip.ZIP, period.
 ```
 
-Seems the NuttX Build need to be fixed to support LVGL 8. 
+Seems the NuttX Build needs to be fixed to support LVGL 8. 
 
 # Sharing SPI Bus
 
